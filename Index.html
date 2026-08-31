@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevHub - LeetCode & GFG Top Interview Patterns</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #090d16;
+      color: #ffffff;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Glows */
+    .glow-circle {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+      pointer-events: none;
+      animation: float 10s ease-in-out infinite alternate;
+    }
+
+    .circle-1 {
+      width: 450px;
+      height: 450px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      top: 5%;
+      left: 10%;
+    }
+
+    .circle-2 {
+      width: 500px;
+      height: 500px;
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      bottom: 5%;
+      right: 10%;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(40px) scale(1.05); }
+    }
+
+    /* ================= 1. AUTH VIEW (LOGIN & REGISTER) ================= */
+    #authView {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .auth-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 440px;
+      padding: 36px 32px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .auth-header h2 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .auth-header p {
+      font-size: 0.88rem;
+      color: #94a3b8;
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #94a3b8;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.25s ease;
+    }
+
+    .auth-tab.active {
+      background: #6366f1;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .input-group i.icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 13px 44px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      font-size: 0.92rem;
+      color: #ffffff;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+      border-color: #6366f1;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .toggle-password:hover {
+      color: #ffffff;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+    }
+
+    .switch-prompt {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .switch-prompt a {
+      color: #818cf8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .switch-prompt a:hover {
+      text-decoration: underline;
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ================= 2. DASHBOARD VIEW ================= */
+    #dashboardView {
+      display: none;
+      opacity: 0;
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      flex-direction: column;
+      transition: opacity 0.5s ease;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 48px;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .brand i {
+      color: #6366f1;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logout-btn {
+      padding: 8px 16px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      color: #f87171;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .dashboard-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 40px 24px 80px 24px;
+      width: 100%;
+    }
+
+    .section-header {
+      margin-bottom: 24px;
+    }
+
+    .section-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    /* Platform Tabs (LeetCode vs GFG) */
+    .platform-switcher {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 24px;
+      gap: 6px;
+    }
+
+    .platform-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      transition: all 0.25s ease;
+    }
+
+    .platform-btn.active.leetcode-btn {
+      background: #ffa116;
+      color: #0f172a;
+      box-shadow: 0 4px 15px rgba(255, 161, 22, 0.35);
+    }
+
+    .platform-btn.active.gfg-btn {
+      background: #2f8d46;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(47, 141, 70, 0.4);
+    }
+
+    /* Filter & Search Toolbar */
+    .toolbar-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px 20px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #ffffff;
+      outline: none;
+      font-size: 0.9rem;
+    }
+
+    .filter-tags {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: #6366f1;
+      color: #ffffff;
+      border-color: #6366f1;
+    }
+
+    /* Patterns Grid */
+    .patterns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+      gap: 24px;
+    }
+
+    .pattern-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .pattern-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    .pattern-head {
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 12px;
+    }
+
+    .pattern-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pattern-count {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .pattern-desc {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* Question Item List */
+    .question-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .question-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: #cbd5e1;
+      transition: all 0.2s;
+    }
+
+    .question-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .q-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 78%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .q-num {
+      color: #64748b;
+      font-size: 0.78rem;
+      font-weight: 600;
+      min-width: 24px;
+    }
+
+    /* Badges */
+    .badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .badge-easy { background: rgba(0, 184, 163, 0.15); color: #00b8a3; }
+    .badge-medium, .badge-med { background: rgba(255, 192, 30, 0.15); color: #ffc01e; }
+    .badge-hard { background: rgba(255, 55, 95, 0.15); color: #ff375f; }
+  </style>
+</head>
+<body>
+
+  <div class="glow-circle circle-1"></div>
+  <div class="glow-circle circle-2"></div>
+
+  <section id="authView">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2 id="authTitle">Welcome Back</h2>
+        <p id="authSubtitle">Sign in to unlock LeetCode & GFG Interview Patterns</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchAuthMode('login')">Sign In</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthMode('register')">Register</button>
+      </div>
+
+      <form id="loginForm" class="form-section active">
+        <div class="input-group">
+          <i class="fa-regular fa-envelope icon"></i>
+          <input type="email" id="loginEmail" placeholder="name@example.com" required />
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-lock icon"></i>
+          <input type="password" id="loginPassword" placeholder="Password" required />
+          <i class="fa-regular fa-eye-slash toggle-password" onclick="togglePassVisibility('loginPassword', this)"></i>
+        </div>
+
+        <button type="submit" class="submit-btn">Access Roadmap</button>
+
+        <div class="switch-prompt">
+          Don't have an account? <a href="#" onclick="switchAuthMode('register'); return false;">Create one</a>
+        </div>
+      </form>
+
+      <form id="registerForm" class="form-section">
+        <div class="input-group">
+          <i class="fa-regular fa-user icon"></i>
+          <input type="text" id="regName" placeholder="Full Name" required />
+        </div>
+
+        <div class="input-group">
+          <i class="fa-regular fa-envelope icon"></i>
+          <input type="email" id="regEmail" placeholder="name@example.com" required />
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-lock icon"></i>
+          <input type="password" id="regPassword" placeholder="Create Password" required minlength="6" />
+          <i class="fa-regular fa-eye-slash toggle-password" onclick="togglePassVisibility('regPassword', this)"></i>
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-shield-halved icon"></i>
+          <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required minlength="6" />
+          <i class="fa-regular fa-eye-slash toggle-password" onclick="togglePassVisibility('regConfirmPassword', this)"></i>
+        </div>
+
+        <button type="submit" class="submit-btn">Create Account & Enter</button>
+
+        <div class="switch-prompt">
+          Already have an account? <a href="#" onclick="switchAuthMode('login'); return false;">Sign In</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="dashboardView">
+    <nav class="navbar">
+      <div class="brand">
+        <i class="fa-solid fa-code"></i>
+        <span>DevHub</span>
+      </div>
+      <div class="user-profile">
+        <div style="text-align: right;">
+          <div id="displayUser" style="font-weight: 600; font-size: 0.95rem;">Developer</div>
+          <div id="displayStats" style="font-size: 0.75rem; color: #94a3b8;">LeetCode & GFG Mode</div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </nav>
+
+    <main class="dashboard-content">
+      <div class="section-header">
+        <h1 id="dashboardHeading">LeetCode Top Interview 150 (Pattern-Wise)</h1>
+        <p id="dashboardDesc">Explore problems organized by core algorithmic strategy. Filter by difficulty or search by name to target specific patterns.</p>
+      </div>
+
+      <div class="platform-switcher">
+        <button class="platform-btn active leetcode-btn" id="btnLeetCode" onclick="switchPlatform('leetcode')">
+          <i class="fa-solid fa-terminal"></i> LeetCode Top 150
+        </button>
+        <button class="platform-btn gfg-btn" id="btnGFG" onclick="switchPlatform('gfg')">
+          <i class="fa-solid fa-laptop-code"></i> GeeksforGeeks Must-Do
+        </button>
+      </div>
+
+      <div class="toolbar-container">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Search problem by name, number, or pattern..." />
+        </div>
+        <div class="filter-tags">
+          <button class="filter-btn active" onclick="filterDifficulty('all')">All</button>
+          <button class="filter-btn" onclick="filterDifficulty('Easy')">Easy</button>
+          <button class="filter-btn" onclick="filterDifficulty('Medium')">Medium</button>
+          <button class="filter-btn" onclick="filterDifficulty('Hard')">Hard</button>
+        </div>
+      </div>
+
+      <div class="patterns-grid" id="patternsContainer"></div>
+    </main>
+  </section>
+
+  <script>
+    // ================= DATA STORES =================
+    const leetCodeTop150Data = [
+      {
+        pattern: "1. Array / String",
+        desc: "Core element manipulations, pointers, greedy decisions, and basic strings.",
+        questions: [
+          { id: 88, name: "Merge Sorted Array", diff: "Easy", url: "https://leetcode.com/problems/merge-sorted-array/" },
+          { id: 27, name: "Remove Element", diff: "Easy", url: "https://leetcode.com/problems/remove-element/" },
+          { id: 26, name: "Remove Duplicates from Sorted Array", diff: "Easy", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/" },
+          { id: 80, name: "Remove Duplicates from Sorted Array II", diff: "Medium", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/" },
+          { id: 169, name: "Majority Element", diff: "Easy", url: "https://leetcode.com/problems/majority-element/" },
+          { id: 189, name: "Rotate Array", diff: "Medium", url: "https://leetcode.com/problems/rotate-array/" },
+          { id: 121, name: "Best Time to Buy and Sell Stock", diff: "Easy", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" },
+          { id: 122, name: "Best Time to Buy and Sell Stock II", diff: "Medium", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" },
+          { id: 55, name: "Jump Game", diff: "Medium", url: "https://leetcode.com/problems/jump-game/" },
+          { id: 45, name: "Jump Game II", diff: "Medium", url: "https://leetcode.com/problems/jump-game-ii/" },
+          { id: 274, name: "H-Index", diff: "Medium", url: "https://leetcode.com/problems/h-index/" },
+          { id: 380, name: "Insert Delete GetRandom O(1)", diff: "Medium", url: "https://leetcode.com/problems/insert-delete-getrandom-o1/" },
+          { id: 238, name: "Product of Array Except Self", diff: "Medium", url: "https://leetcode.com/problems/product-of-array-except-self/" },
+          { id: 134, name: "Gas Station", diff: "Medium", url: "https://leetcode.com/problems/gas-station/" },
+          { id: 135, name: "Candy", diff: "Hard", url: "https://leetcode.com/problems/candy/" },
+          { id: 42, name: "Trapping Rain Water", diff: "Hard", url: "https://leetcode.com/problems/trapping-rain-water/" },
+          { id: 13, name: "Roman to Integer", diff: "Easy", url: "https://leetcode.com/problems/roman-to-integer/" },
+          { id: 12, name: "Integer to Roman", diff: "Medium", url: "https://leetcode.com/problems/integer-to-roman/" },
+          { id: 58, name: "Length of Last Word", diff: "Easy", url: "https://leetcode.com/problems/length-of-last-word/" },
+          { id: 14, name: "Longest Common Prefix", diff: "Easy", url: "https://leetcode.com/problems/longest-common-prefix/" },
+          { id: 151, name: "Reverse Words in a String", diff: "Medium", url: "https://leetcode.com/problems/reverse-words-in-a-string/" },
+          { id: 6, name: "Zigzag Conversion", diff: "Medium", url: "https://leetcode.com/problems/zigzag-conversion/" },
+          { id: 28, name: "Find the Index of the First Occurrence in a String", diff: "Easy", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/" },
+          { id: 68, name: "Text Justification", diff: "Hard", url: "https://leetcode.com/problems/text-justification/" }
+        ]
+      },
+      {
+        pattern: "2. Two Pointers",
+        desc: "Converging or opposite pointers on sorted arrays and strings.",
+        questions: [
+          { id: 125, name: "Valid Palindrome", diff: "Easy", url: "https://leetcode.com/problems/valid-palindrome/" },
+          { id: 392, name: "Is Subsequence", diff: "Easy", url: "https://leetcode.com/problems/is-subsequence/" },
+          { id: 167, name: "Two Sum II - Input Array Is Sorted", diff: "Medium", url: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/" },
+          { id: 11, name: "Container With Most Water", diff: "Medium", url: "https://leetcode.com/problems/container-with-most-water/" },
+          { id: 15, name: "3Sum", diff: "Medium", url: "https://leetcode.com/problems/3sum/" }
+        ]
+      },
+      {
+        pattern: "3. Sliding Window",
+        desc: "Dynamic window boundaries over continuous subarrays or substrings.",
+        questions: [
+          { id: 209, name: "Minimum Size Subarray Sum", diff: "Medium", url: "https://leetcode.com/problems/minimum-size-subarray-sum/" },
+          { id: 3, name: "Longest Substring Without Repeating Characters", diff: "Medium", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/" },
+          { id: 30, name: "Substring with Concatenation of All Words", diff: "Hard", url: "https://leetcode.com/problems/substring-with-concatenation-of-all-words/" },
+          { id: 76, name: "Minimum Window Substring", diff: "Hard", url: "https://leetcode.com/problems/minimum-window-substring/" }
+        ]
+      },
+      {
+        pattern: "4. Matrix",
+        desc: "2D grid traversals, in-place rotations, and boundary simulations.",
+        questions: [
+          { id: 36, name: "Valid Sudoku", diff: "Medium", url: "https://leetcode.com/problems/valid-sudoku/" },
+          { id: 54, name: "Spiral Matrix", diff: "Medium", url: "https://leetcode.com/problems/spiral-matrix/" },
+          { id: 48, name: "Rotate Image", diff: "Medium", url: "https://leetcode.com/problems/rotate-image/" },
+          { id: 73, name: "Set Matrix Zeroes", diff: "Medium", url: "https://leetcode.com/problems/set-matrix-zeroes/" },
+          { id: 289, name: "Game of Life", diff: "Medium", url: "https://leetcode.com/problems/game-of-life/" }
+        ]
+      },
+      {
+        pattern: "5. Hashmap / Hash Table",
+        desc: "Frequency maps, key-value lookup, and string pattern matching.",
+        questions: [
+          { id: 383, name: "Ransom Note", diff: "Easy", url: "https://leetcode.com/problems/ransom-note/" },
+          { id: 205, name: "Isomorphic Strings", diff: "Easy", url: "https://leetcode.com/problems/isomorphic-strings/" },
+          { id: 290, name: "Word Pattern", diff: "Easy", url: "https://leetcode.com/problems/word-pattern/" },
+          { id: 242, name: "Valid Anagram", diff: "Easy", url: "https://leetcode.com/problems/valid-anagram/" },
+          { id: 49, name: "Group Anagrams", diff: "Medium", url: "https://leetcode.com/problems/group-anagrams/" },
+          { id: 1, name: "Two Sum", diff: "Easy", url: "https://leetcode.com/problems/two-sum/" },
+          { id: 202, name: "Happy Number", diff: "Easy", url: "https://leetcode.com/problems/happy-number/" },
+          { id: 219, name: "Contains Duplicate II", diff: "Easy", url: "https://leetcode.com/problems/contains-duplicate-ii/" },
+          { id: 128, name: "Longest Consecutive Sequence", diff: "Medium", url: "https://leetcode.com/problems/longest-consecutive-sequence/" }
+        ]
+      },
+      {
+        pattern: "6. Intervals",
+        desc: "Sorting, merging, and finding overlap points across ranges.",
+        questions: [
+          { id: 228, name: "Summary Ranges", diff: "Easy", url: "https://leetcode.com/problems/summary-ranges/" },
+          { id: 56, name: "Merge Intervals", diff: "Medium", url: "https://leetcode.com/problems/merge-intervals/" },
+          { id: 57, name: "Insert Interval", diff: "Medium", url: "https://leetcode.com/problems/insert-interval/" },
+          { id: 452, name: "Minimum Number of Arrows to Burst Balloons", diff: "Medium", url: "https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/" }
+        ]
+      },
+      {
+        pattern: "7. Stack",
+        desc: "LIFO evaluations, parenthesis verification, and expression calculation.",
+        questions: [
+          { id: 20, name: "Valid Parentheses", diff: "Easy", url: "https://leetcode.com/problems/valid-parentheses/" },
+          { id: 71, name: "Simplify Path", diff: "Medium", url: "https://leetcode.com/problems/simplify-path/" },
+          { id: 155, name: "Min Stack", diff: "Medium", url: "https://leetcode.com/problems/min-stack/" },
+          { id: 150, name: "Evaluate Reverse Polish Notation", diff: "Medium", url: "https://leetcode.com/problems/evaluate-reverse-polish-notation/" },
+          { id: 224, name: "Basic Calculator", diff: "Hard", url: "https://leetcode.com/problems/basic-calculator/" }
+        ]
+      },
+      {
+        pattern: "8. Linked List",
+        desc: "Pointer manipulation, reversals, fast/slow cycle checks, and LRU cache.",
+        questions: [
+          { id: 141, name: "Linked List Cycle", diff: "Easy", url: "https://leetcode.com/problems/linked-list-cycle/" },
+          { id: 2, name: "Add Two Numbers", diff: "Medium", url: "https://leetcode.com/problems/add-two-numbers/" },
+          { id: 21, name: "Merge Two Sorted Lists", diff: "Easy", url: "https://leetcode.com/problems/merge-two-sorted-lists/" },
+          { id: 138, name: "Copy List with Random Pointer", diff: "Medium", url: "https://leetcode.com/problems/copy-list-with-random-pointer/" },
+          { id: 92, name: "Reverse Linked List II", diff: "Medium", url: "https://leetcode.com/problems/reverse-linked-list-ii/" },
+          { id: 25, name: "Reverse Nodes in k-Group", diff: "Hard", url: "https://leetcode.com/problems/reverse-nodes-in-k-group/" },
+          { id: 19, name: "Remove Nth Node From End of List", diff: "Medium", url: "https://leetcode.com/problems/remove-nth-node-from-end-of-list/" },
+          { id: 82, name: "Remove Duplicates from Sorted List II", diff: "Medium", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/" },
+          { id: 61, name: "Rotate List", diff: "Medium", url: "https://leetcode.com/problems/rotate-list/" },
+          { id: 86, name: "Partition List", diff: "Medium", url: "https://leetcode.com/problems/partition-list/" },
+          { id: 146, name: "LRU Cache", diff: "Medium", url: "https://leetcode.com/problems/lru-cache/" }
+        ]
+      },
+      {
+        pattern: "9. Binary Tree General (DFS)",
+        desc: "Tree recursions, depth computations, and subtree verifications.",
+        questions: [
+          { id: 104, name: "Maximum Depth of Binary Tree", diff: "Easy", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/" },
+          { id: 100, name: "Same Tree", diff: "Easy", url: "https://leetcode.com/problems/same-tree/" },
+          { id: 226, name: "Invert Binary Tree", diff: "Easy", url: "https://leetcode.com/problems/invert-binary-tree/" },
+          { id: 101, name: "Symmetric Tree", diff: "Easy", url: "https://leetcode.com/problems/symmetric-tree/" },
+          { id: 105, name: "Construct Binary Tree from Preorder and Inorder Traversal", diff: "Medium", url: "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" },
+          { id: 106, name: "Construct Binary Tree from Inorder and Postorder Traversal", diff: "Medium", url: "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/" },
+          { id: 117, name: "Populating Next Right Pointers in Each Node II", diff: "Medium", url: "https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/" },
+          { id: 114, name: "Flatten Binary Tree to Linked List", diff: "Medium", url: "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/" },
+          { id: 112, name: "Path Sum", diff: "Easy", url: "https://leetcode.com/problems/path-sum/" },
+          { id: 129, name: "Sum Root to Leaf Numbers", diff: "Medium", url: "https://leetcode.com/problems/sum-root-to-leaf-numbers/" },
+          { id: 124, name: "Binary Tree Maximum Path Sum", diff: "Hard", url: "https://leetcode.com/problems/binary-tree-maximum-path-sum/" },
+          { id: 173, name: "Binary Search Tree Iterator", diff: "Medium", url: "https://leetcode.com/problems/binary-search-tree-iterator/" },
+          { id: 222, name: "Count Complete Tree Nodes", diff: "Easy", url: "https://leetcode.com/problems/count-complete-tree-nodes/" },
+          { id: 236, name: "Lowest Common Ancestor of a Binary Tree", diff: "Medium", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/" }
+        ]
+      },
+      {
+        pattern: "10. Binary Tree BFS",
+        desc: "Level-by-level queue traversals and zigzag patterns.",
+        questions: [
+          { id: 199, name: "Binary Tree Right Side View", diff: "Medium", url: "https://leetcode.com/problems/binary-tree-right-side-view/" },
+          { id: 637, name: "Average of Levels in Binary Tree", diff: "Easy", url: "https://leetcode.com/problems/average-of-levels-in-binary-tree/" },
+          { id: 102, name: "Binary Tree Level Order Traversal", diff: "Medium", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/" },
+          { id: 103, name: "Binary Tree Zigzag Level Order Traversal", diff: "Medium", url: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/" }
+        ]
+      },
+      {
+        pattern: "11. Binary Search Tree (BST)",
+        desc: "In-order ordering properties and BST validation.",
+        questions: [
+          { id: 530, name: "Minimum Absolute Difference in BST", diff: "Easy", url: "https://leetcode.com/problems/minimum-absolute-difference-in-bst/" },
+          { id: 230, name: "Kth Smallest Element in a BST", diff: "Medium", url: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/" },
+          { id: 98, name: "Validate Binary Search Tree", diff: "Medium", url: "https://leetcode.com/problems/validate-binary-search-tree/" }
+        ]
+      },
+      {
+        pattern: "12. Graph General (DFS / BFS)",
+        desc: "Connected components, cycle detection, and topological sorting.",
+        questions: [
+          { id: 200, name: "Number of Islands", diff: "Medium", url: "https://leetcode.com/problems/number-of-islands/" },
+          { id: 130, name: "Surrounded Regions", diff: "Medium", url: "https://leetcode.com/problems/surrounded-regions/" },
+          { id: 133, name: "Clone Graph", diff: "Medium", url: "https://leetcode.com/problems/clone-graph/" },
+          { id: 399, name: "Evaluate Division", diff: "Medium", url: "https://leetcode.com/problems/evaluate-division/" },
+          { id: 207, name: "Course Schedule", diff: "Medium", url: "https://leetcode.com/problems/course-schedule/" },
+          { id: 210, name: "Course Schedule II", diff: "Medium", url: "https://leetcode.com/problems/course-schedule-ii/" }
+        ]
+      },
+      {
+        pattern: "13. Graph BFS",
+        desc: "Shortest paths in unweighted graphs and state transitions.",
+        questions: [
+          { id: 909, name: "Snakes and Ladders", diff: "Medium", url: "https://leetcode.com/problems/snakes-and-ladders/" },
+          { id: 433, name: "Minimum Genetic Mutation", diff: "Medium", url: "https://leetcode.com/problems/minimum-genetic-mutation/" },
+          { id: 127, name: "Word Ladder", diff: "Hard", url: "https://leetcode.com/problems/word-ladder/" }
+        ]
+      },
+      {
+        pattern: "14. Trie (Prefix Tree)",
+        desc: "Efficient string search trees and prefix matching.",
+        questions: [
+          { id: 208, name: "Implement Trie (Prefix Tree)", diff: "Medium", url: "https://leetcode.com/problems/implement-trie-prefix-tree/" },
+          { id: 211, name: "Design Add and Search Words Data Structure", diff: "Medium", url: "https://leetcode.com/problems/design-add-and-search-words-data-structure/" },
+          { id: 212, name: "Word Search II", diff: "Hard", url: "https://leetcode.com/problems/word-search-ii/" }
+        ]
+      },
+      {
+        pattern: "15. Backtracking",
+        desc: "Combinatorial exploration, permutations, and grid searches.",
+        questions: [
+          { id: 17, name: "Letter Combinations of a Phone Number", diff: "Medium", url: "https://leetcode.com/problems/letter-combinations-of-a-phone-number/" },
+          { id: 77, name: "Combinations", diff: "Medium", url: "https://leetcode.com/problems/combinations/" },
+          { id: 46, name: "Permutations", diff: "Medium", url: "https://leetcode.com/problems/permutations/" },
+          { id: 39, name: "Combination Sum", diff: "Medium", url: "https://leetcode.com/problems/combination-sum/" },
+          { id: 52, name: "N-Queens II", diff: "Hard", url: "https://leetcode.com/problems/n-queens-ii/" },
+          { id: 22, name: "Generate Parentheses", diff: "Medium", url: "https://leetcode.com/problems/generate-parentheses/" },
+          { id: 79, name: "Word Search", diff: "Medium", url: "https://leetcode.com/problems/word-search/" }
+        ]
+      },
+      {
+        pattern: "16. Divide & Conquer",
+        desc: "Subproblem splitting, merge sort variants, and quad trees.",
+        questions: [
+          { id: 108, name: "Convert Sorted Array to Binary Search Tree", diff: "Easy", url: "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/" },
+          { id: 148, name: "Sort List", diff: "Medium", url: "https://leetcode.com/problems/sort-list/" },
+          { id: 427, name: "Construct Quad Tree", diff: "Medium", url: "https://leetcode.com/problems/construct-quad-tree/" },
+          { id: 23, name: "Merge k Sorted Lists", diff: "Hard", url: "https://leetcode.com/problems/merge-k-sorted-lists/" }
+        ]
+      },
+      {
+        pattern: "17. Kadane's Algorithm",
+        desc: "Optimal continuous subarray sum tracking in O(N).",
+        questions: [
+          { id: 53, name: "Maximum Subarray", diff: "Medium", url: "https://leetcode.com/problems/maximum-subarray/" },
+          { id: 918, name: "Maximum Sum Circular Subarray", diff: "Medium", url: "https://leetcode.com/problems/maximum-sum-circular-subarray/" }
+        ]
+      },
+      {
+        pattern: "18. Binary Search",
+        desc: "O(log N) search spaces, rotated arrays, and boundary detection.",
+        questions: [
+          { id: 35, name: "Search Insert Position", diff: "Easy", url: "https://leetcode.com/problems/search-insert-position/" },
+          { id: 74, name: "Search a 2D Matrix", diff: "Medium", url: "https://leetcode.com/problems/search-a-2d-matrix/" },
+          { id: 162, name: "Find Peak Element", diff: "Medium", url: "https://leetcode.com/problems/find-peak-element/" },
+          { id: 33, name: "Search in Rotated Sorted Array", diff: "Medium", url: "https://leetcode.com/problems/search-in-rotated-sorted-array/" },
+          { id: 34, name: "Find First and Last Position of Element in Sorted Array", diff: "Medium", url: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" },
+          { id: 153, name: "Find Minimum in Rotated Sorted Array", diff: "Medium", url: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" },
+          { id: 4, name: "Median of Two Sorted Arrays", diff: "Hard", url: "https://leetcode.com/problems/median-of-two-sorted-arrays/" }
+        ]
+      },
+      {
+        pattern: "19. Heap / Priority Queue",
+        desc: "Top 'K' elements, streaming medians, and greedy priority queues.",
+        questions: [
+          { id: 215, name: "Kth Largest Element in an Array", diff: "Medium", url: "https://leetcode.com/problems/kth-largest-element-in-an-array/" },
+          { id: 373, name: "Find K Pairs with Smallest Sums", diff: "Medium", url: "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/" },
+          { id: 502, name: "IPO", diff: "Hard", url: "https://leetcode.com/problems/ipo/" },
+          { id: 295, name: "Find Median from Data Stream", diff: "Hard", url: "https://leetcode.com/problems/find-median-from-data-stream/" }
+        ]
+      },
+      {
+        pattern: "20. Bit Manipulation",
+        desc: "XOR cancellations, bit masking, and binary additions.",
+        questions: [
+          { id: 67, name: "Add Binary", diff: "Easy", url: "https://leetcode.com/problems/add-binary/" },
+          { id: 190, name: "Reverse Bits", diff: "Easy", url: "https://leetcode.com/problems/reverse-bits/" },
+          { id: 191, name: "Number of 1 Bits", diff: "Easy", url: "https://leetcode.com/problems/number-of-1-bits/" },
+          { id: 136, name: "Single Number", diff: "Easy", url: "https://leetcode.com/problems/single-number/" },
+          { id: 137, name: "Single Number II", diff: "Medium", url: "https://leetcode.com/problems/single-number-ii/" },
+          { id: 201, name: "Bitwise AND of Numbers Range", diff: "Medium", url: "https://leetcode.com/problems/bitwise-and-of-numbers-range/" }
+        ]
+      },
+      {
+        pattern: "21. Math",
+        desc: "Number theory, palindromes, powers, and geometry.",
+        questions: [
+          { id: 9, name: "Palindrome Number", diff: "Easy", url: "https://leetcode.com/problems/palindrome-number/" },
+          { id: 66, name: "Plus One", diff: "Easy", url: "https://leetcode.com/problems/plus-one/" },
+          { id: 172, name: "Factorial Trailing Zeroes", diff: "Medium", url: "https://leetcode.com/problems/factorial-trailing-zeroes/" },
+          { id: 69, name: "Sqrt(x)", diff: "Easy", url: "https://leetcode.com/problems/sqrtx/" },
+          { id: 50, name: "Pow(x, n)", diff: "Medium", url: "https://leetcode.com/problems/powx-n/" },
+          { id: 149, name: "Max Points on a Line", diff: "Hard", url: "https://leetcode.com/problems/max-points-on-a-line/" }
+        ]
+      },
+      {
+        pattern: "22. 1D Dynamic Programming",
+        desc: "Linear state memoization and optimal subproblems.",
+        questions: [
+          { id: 70, name: "Climbing Stairs", diff: "Easy", url: "https://leetcode.com/problems/climbing-stairs/" },
+          { id: 198, name: "House Robber", diff: "Medium", url: "https://leetcode.com/problems/house-robber/" },
+          { id: 139, name: "Word Break", diff: "Medium", url: "https://leetcode.com/problems/word-break/" },
+          { id: 322, name: "Coin Change", diff: "Medium", url: "https://leetcode.com/problems/coin-change/" },
+          { id: 300, name: "Longest Increasing Subsequence", diff: "Medium", url: "https://leetcode.com/problems/longest-increasing-subsequence/" }
+        ]
+      },
+      {
+        pattern: "23. Multidimensional DP",
+        desc: "Grid paths, string distance edits, and stock state machines.",
+        questions: [
+          { id: 120, name: "Triangle", diff: "Medium", url: "https://leetcode.com/problems/triangle/" },
+          { id: 64, name: "Minimum Path Sum", diff: "Medium", url: "https://leetcode.com/problems/minimum-path-sum/" },
+          { id: 63, name: "Unique Paths II", diff: "Medium", url: "https://leetcode.com/problems/unique-paths-ii/" },
+          { id: 5, name: "Longest Palindromic Substring", diff: "Medium", url: "https://leetcode.com/problems/longest-palindromic-substring/" },
+          { id: 97, name: "Interleaving String", diff: "Medium", url: "https://leetcode.com/problems/interleaving-string/" },
+          { id: 72, name: "Edit Distance", diff: "Hard", url: "https://leetcode.com/problems/edit-distance/" },
+          { id: 123, name: "Best Time to Buy and Sell Stock III", diff: "Hard", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/" },
+          { id: 188, name: "Best Time to Buy and Sell Stock IV", diff: "Hard", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/" },
+          { id: 221, name: "Maximal Square", diff: "Medium", url: "https://leetcode.com/problems/maximal-square/" }
+        ]
+      }
+    ];
+
+    const gfgMustDoData = [
+      {
+        pattern: "1. Array & String Sliding Window",
+        desc: "Target sum continuous subarrays, distinct window elements, and fixed size K subarrays.",
+        questions: [
+          { id: 1, name: "Subarray with given sum", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/subarray-with-given-sum-1587115621/1" },
+          { id: 2, name: "Count distinct elements in every window", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/count-distinct-elements-in-every-window/1" },
+          { id: 3, name: "Smallest distinct window", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/smallest-distant-window3132/1" },
+          { id: 4, name: "Longest Sub-Array with Sum K", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/longest-sub-array-with-sum-k0809/1" },
+          { id: 5, name: "Max Sum Subarray of size K", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/max-sum-subarray-of-size-k5313/1" }
+        ]
+      },
+      {
+        pattern: "2. Two Pointers (Converging & Fast/Slow)",
+        desc: "Triplets with zero sum, Y-shaped linked lists, duplicate removals, and Dutch National Flag.",
+        questions: [
+          { id: 6, name: "Find triplet with zero sum", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/find-triplets-with-zero-sum/1" },
+          { id: 7, name: "Intersection Point in Y Shaped Linked Lists", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/intersection-point-in-y-shapped-linked-lists/1" },
+          { id: 8, name: "Remove duplicate elements from sorted Array", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/remove-duplicate-elements-from-sorted-array/1" },
+          { id: 9, name: "Segregate 0s and 1s", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/segregate-0s-and-1s5106/1" },
+          { id: 10, name: "Sort an array of 0s, 1s and 2s (Dutch National Flag)", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/sort-an-array-of-0s-1s-and-2s4231/1" },
+          { id: 11, name: "Finding Middle Element in a Linked List", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/finding-middle-element-in-a-linked-list/1" },
+          { id: 12, name: "Reverse a Linked List", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/reverse-a-linked-list/1" },
+          { id: 13, name: "Detect Loop in Linked List", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/detect-loop-in-linked-list/1" },
+          { id: 14, name: "Remove Loop in Linked List", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/remove-loop-in-linked-list/1" }
+        ]
+      },
+      {
+        pattern: "3. Monotonic Stack & Monotonic Queue",
+        desc: "Next larger elements, online stock spans, and maximum rectangular areas.",
+        questions: [
+          { id: 15, name: "Next Larger Element", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/next-larger-element-1587115620/1" },
+          { id: 16, name: "Stock span problem", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/stock-span-problem-1587115621/1" },
+          { id: 17, name: "Maximum Rectangular Area in a Histogram", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/maximum-rectangular-area-in-a-histogram-1587115620/1" },
+          { id: 18, name: "Max rectangle (in binary matrix)", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/max-rectangle/1" },
+          { id: 19, name: "Parenthesis Checker", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/parenthesis-checker2744/1" }
+        ]
+      },
+      {
+        pattern: "4. Binary Search & Binary Search on Answer Space",
+        desc: "Book allocation, Aggressive Cows, Painter's Partition, and K-th element of two sorted arrays.",
+        questions: [
+          { id: 20, name: "Allocate Minimum Number of Pages", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1" },
+          { id: 21, name: "Aggressive Cows", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/aggressive-cows/1" },
+          { id: 22, name: "Painter's Partition Problem", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/the-painters-partition-problem1535/1" },
+          { id: 23, name: "K-th element of two sorted arrays", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1" },
+          { id: 24, name: "Missing Number in Array", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/missing-number-in-array1416/1" }
+        ]
+      },
+      {
+        pattern: "5. Intervals & Scheduling",
+        desc: "Minimum platforms, overlapping intervals, N meetings, and greedy activity selections.",
+        questions: [
+          { id: 25, name: "Minimum Platforms", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/minimum-platforms-1587115620/1" },
+          { id: 26, name: "Overlapping Intervals", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/overlapping-intervals--170633/1" },
+          { id: 27, name: "N meetings in one room", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/n-meetings-in-one-room-1587115620/1" },
+          { id: 28, name: "Activity Selection", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/activity-selection-1587115620/1" }
+        ]
+      },
+      {
+        pattern: "6. Heaps & Top K Elements",
+        desc: "Connecting ropes with minimum cost, streaming medians, and K largest items.",
+        questions: [
+          { id: 29, name: "K Largest Elements", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/k-largest-elements4206/1" },
+          { id: 30, name: "Connect Ropes to Minimise Cost", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1" },
+          { id: 31, name: "Merge K sorted linked lists", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/merge-k-sorted-linked-lists/1" },
+          { id: 32, name: "Find median in a stream", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/find-median-in-a-stream-1587115620/1" }
+        ]
+      },
+      {
+        pattern: "7. Trees: DFS, BFS, and Tree Path States",
+        desc: "Bottom/Top/Left/Right views, boundary traversal, BST validation, and Distance K nodes.",
+        questions: [
+          { id: 33, name: "Bottom View of Binary Tree", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1" },
+          { id: 34, name: "Top View of Binary Tree", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/top-view-of-binary-tree/1" },
+          { id: 35, name: "Left View of Binary Tree", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/left-view-of-binary-tree/1" },
+          { id: 36, name: "Right View of Binary Tree", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/right-view-of-binary-tree/1" },
+          { id: 37, name: "Boundary Traversal of binary tree", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1" },
+          { id: 38, name: "Check for BST", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/check-for-bst/1" },
+          { id: 39, name: "Nodes at given distance in binary tree (Distance K)", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/nodes-at-given-distance-in-binary-tree/1" },
+          { id: 40, name: "Lowest Common Ancestor in a BST", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/lowest-common-ancestor-in-a-bst/1" },
+          { id: 41, name: "Diameter of a Binary Tree", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/diameter-of-binary-tree/1" },
+          { id: 42, name: "Height of Binary Tree", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/height-of-binary-tree/1" }
+        ]
+      },
+      {
+        pattern: "8. Backtracking & Combinatorial Search",
+        desc: "Rat in a maze, M-coloring, Sudoku solver, and valid parentheses generation.",
+        questions: [
+          { id: 43, name: "Rat in a Maze Problem - I", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/rat-in-a-maze-problem/1" },
+          { id: 44, name: "M-Coloring Problem", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1" },
+          { id: 45, name: "Solve the Sudoku", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/solve-the-sudoku-1587115621/1" },
+          { id: 46, name: "Generate all possible parentheses", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/generate-all-possible-parentheses/1" }
+        ]
+      },
+      {
+        pattern: "9. Graph Algorithms",
+        desc: "Cycle checks, Alien Dictionary, Dijkstra, Disjoint Set Union, Floyd Warshall, and Bipartite graphs.",
+        questions: [
+          { id: 47, name: "Detect cycle in an undirected graph", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1" },
+          { id: 48, name: "Detect cycle in a directed graph", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1" },
+          { id: 49, name: "Alien Dictionary", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/alien-dictionary/1" },
+          { id: 50, name: "Dijkstra Algorithm", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1" },
+          { id: 51, name: "Disjoint set (Union-Find)", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/disjoint-set-union-find/1" },
+          { id: 52, name: "Floyd Warshall", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1" },
+          { id: 53, name: "Bipartite Graph", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/bipartite-graph/1" },
+          { id: 54, name: "BFS of Graph", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1" },
+          { id: 55, name: "DFS of Graph", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1" },
+          { id: 56, name: "Topological Sort", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/topological-sort/1" },
+          { id: 57, name: "Rotten Oranges", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/rotten-oranges2536/1" }
+        ]
+      },
+      {
+        pattern: "10. Dynamic Programming Archetypes",
+        desc: "Stickler Thief, 0/1 Knapsack, LCS, Edit Distance, LIS, Matrix Chain, and Stock Transactions.",
+        questions: [
+          { id: 58, name: "Stickler Thief (Linear DP)", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/stickler-theif-1587115621/1" },
+          { id: 59, name: "Count ways to reach the n'th stair", diff: "Easy", url: "https://www.geeksforgeeks.org/problems/count-ways-to-reach-the-nth-stair-1587115620/1" },
+          { id: 60, name: "0 - 1 Knapsack Problem", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1" },
+          { id: 61, name: "Subset Sum Problem", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1" },
+          { id: 62, name: "Target Sum", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/target-sum-1626326450/1" },
+          { id: 63, name: "Longest Common Subsequence", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/longest-common-subsequence-1587115620/1" },
+          { id: 64, name: "Edit Distance", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/edit-distance3702/1" },
+          { id: 65, name: "Minimum deletions to make string palindrome", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/minimum-deletitions1648/1" },
+          { id: 66, name: "Longest Increasing Subsequence", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/longest-increasing-subsequence-1587115620/1" },
+          { id: 67, name: "Maximum Sum Increasing Subsequence", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/maximum-sum-increasing-subsequence4749/1" },
+          { id: 68, name: "Matrix Chain Multiplication", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1" },
+          { id: 69, name: "Palindromic Partitioning", diff: "Hard", url: "https://www.geeksforgeeks.org/problems/palindromic-patitioning4845/1" },
+          { id: 70, name: "Stock Buy and Sell with cooldown / k transactions", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/stock-buy-and-sell2615/1" },
+          { id: 71, name: "Coin Change (Count Ways)", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/coin-change2448/1" }
+        ]
+      },
+      {
+        pattern: "11. Trie & Bit Manipulation",
+        desc: "Trie Insertion/Search, Maximum XOR subarrays, non-repeating numbers, and set bit counting.",
+        questions: [
+          { id: 72, name: "Trie | (Insert and Search)", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/trie-insert-and-search0651/1" },
+          { id: 73, name: "Maximum XOR subarray", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/maximum-xor-subarray--141631/1" },
+          { id: 74, name: "Non Repeating Numbers (Two non-repeating elements)", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/finding-the-numbers0215/1" },
+          { id: 75, name: "Count total set bits", diff: "Medium", url: "https://www.geeksforgeeks.org/problems/count-total-set-bits-1587115620/1" }
+        ]
+      }
+    ];
+
+    // App State
+    let currentPlatform = 'leetcode';
+    let currentDifficultyFilter = 'all';
+    let currentSearchTerm = '';
+
+    // Switch Platform
+    function switchPlatform(platform) {
+      currentPlatform = platform;
+      document.getElementById('btnLeetCode').classList.toggle('active', platform === 'leetcode');
+      document.getElementById('btnGFG').classList.toggle('active', platform === 'gfg');
+
+      if (platform === 'leetcode') {
+        document.getElementById('dashboardHeading').innerText = "LeetCode Top Interview 150 (Pattern-Wise)";
+        document.getElementById('dashboardDesc').innerText = "Explore problems organized by core algorithmic strategy. Filter by difficulty or search by name.";
+      } else {
+        document.getElementById('dashboardHeading').innerText = "GeeksforGeeks Curated Interview Patterns";
+        document.getElementById('dashboardDesc').innerText = "Must-do interview coding questions categorized strictly by algorithmic patterns on GeeksforGeeks.";
+      }
+
+      renderPatterns();
+    }
+
+    // Render Pattern Cards
+    function renderPatterns() {
+      const container = document.getElementById('patternsContainer');
+      container.innerHTML = '';
+
+      const dataset = currentPlatform === 'leetcode' ? leetCodeTop150Data : gfgMustDoData;
+
+      dataset.forEach(patternData => {
+        const filteredQuestions = patternData.questions.filter(q => {
+          const matchesDiff = currentDifficultyFilter === 'all' || q.diff.toLowerCase() === currentDifficultyFilter.toLowerCase();
+          const matchesSearch = q.name.toLowerCase().includes(currentSearchTerm) ||
+                                q.id.toString().includes(currentSearchTerm) ||
+                                patternData.pattern.toLowerCase().includes(currentSearchTerm);
+          return matchesDiff && matchesSearch;
+        });
+
+        if (filteredQuestions.length > 0) {
+          const card = document.createElement('div');
+          card.className = 'pattern-card';
+
+          card.innerHTML = `
+            <div class="pattern-head">
+              <div class="pattern-title">
+                <span>${patternData.pattern}</span>
+                <span class="pattern-count">${filteredQuestions.length} Questions</span>
+              </div>
+              <div class="pattern-desc">${patternData.desc}</div>
+            </div>
+            <div class="question-list">
+              ${filteredQuestions.map(q => `
+                <a class="question-item" href="${q.url}" target="_blank">
+                  <div class="q-title">
+                    <span class="q-num">${q.id}.</span>
+                    <span>${q.name}</span>
+                  </div>
+                  <span class="badge badge-${q.diff.toLowerCase()}">${q.diff}</span>
+                </a>
+              `).join('')}
+            </div>
+          `;
+          container.appendChild(card);
+        }
+      });
+    }
+
+    // Filter by Difficulty
+    function filterDifficulty(diff) {
+      currentDifficultyFilter = diff;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.innerText.toLowerCase() === diff.toLowerCase() || (diff === 'all' && btn.innerText.includes('All'))) {
+          btn.classList.add('active');
+        }
+      });
+      renderPatterns();
+    }
+
+    // Search Listener
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      currentSearchTerm = e.target.value.toLowerCase().trim();
+      renderPatterns();
+    });
+
+    // Password Toggle Helper
+    function togglePassVisibility(inputId, iconElem) {
+      const input = document.getElementById(inputId);
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      iconElem.classList.toggle('fa-eye');
+      iconElem.classList.toggle('fa-eye-slash');
+    }
+
+    // Switch between Login and Register tabs
+    function switchAuthMode(mode) {
+      const isLogin = mode === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('loginForm').classList.toggle('active', isLogin);
+      document.getElementById('registerForm').classList.toggle('active', !isLogin);
+
+      document.getElementById('authTitle').innerText = isLogin ? 'Welcome Back' : 'Create an Account';
+      document.getElementById('authSubtitle').innerText = isLogin 
+        ? 'Sign in to unlock LeetCode & GFG Interview Patterns' 
+        : 'Register to start your pattern-wise DSA journey';
+    }
+
+    // Enter Dashboard Helper
+    function enterDashboard(displayName) {
+      const authView = document.getElementById('authView');
+      const dashboardView = document.getElementById('dashboardView');
+      const displayUser = document.getElementById('displayUser');
+
+      displayUser.innerText = displayName;
+
+      authView.style.opacity = '0';
+      authView.style.transform = 'scale(0.96)';
+
+      setTimeout(() => {
+        authView.style.display = 'none';
+        dashboardView.style.display = 'flex';
+        renderPatterns();
+        setTimeout(() => {
+          dashboardView.style.opacity = '1';
+        }, 50);
+      }, 350);
+    }
+
+    // Handle Login Form Submit
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const username = email.split('@')[0];
+      enterDashboard(username.charAt(0).toUpperCase() + username.slice(1));
+    });
+
+    // Handle Register Form Submit
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match! Please check again.");
+        return;
+      }
+
+      enterDashboard(name);
+    });
+
+    // Handle Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      const authView = document.getElementById('authView');
+      const dashboardView = document.getElementById('dashboardView');
+
+      dashboardView.style.opacity = '0';
+      setTimeout(() => {
+        dashboardView.style.display = 'none';
+        authView.style.display = 'flex';
+        switchAuthMode('login');
+        setTimeout(() => {
+          authView.style.opacity = '1';
+          authView.style.transform = 'scale(1)';
+        }, 50);
+      }, 350);
+    });
+  </script>
+</body>
+</html>
